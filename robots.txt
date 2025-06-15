@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://shivam.github.io/sitemap-index.xml
+Host: https://shivam.github.io
