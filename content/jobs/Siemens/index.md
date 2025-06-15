@@ -3,7 +3,7 @@ date: '2024-05-19'
 title: 'Management Intern'
 company: 'Siemens'
 location: 'Mumbai, India'
-range: 'May 2024 - Present'
+range: 'May 2025 - Present'
 url: 'https://www.siemens.com/'
 ---
 

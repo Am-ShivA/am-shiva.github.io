@@ -287,8 +287,9 @@ const Jobs = () => {
                     hidden={activeTabId !== i}>
                     <h3>
                       <span>{title}</span>
+                      <br />
                       <span className="company">
-                        &nbsp;@&nbsp;
+                        @&nbsp;
                         <a href={url} className="inline-link">
                           {company}
                         </a>
