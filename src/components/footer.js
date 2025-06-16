@@ -97,6 +97,7 @@ const Footer = () => {
     stars: null,
     forks: null,
   });
+  const [isPromptShowing, setIsPromptShowing] = useState(false);
 
   useEffect(() => {
     if (process.env.NODE_ENV !== 'production') {
@@ -114,7 +115,13 @@ const Footer = () => {
       .catch(e => console.error(e));
   }, []);
 
-  const showCustomPrompt = () => {
+  const showCustomPrompt = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (isPromptShowing) return;
+    
+    setIsPromptShowing(true);
     const today = new Date();
     const password = today.getDate().toString();
     const userInput = prompt("Well well, look who cracked the code 👀\nNow prove you're worthy... what's the password?");
@@ -124,6 +131,7 @@ const Footer = () => {
     } else if (userInput !== null) {
       alert("Wrong password!");
     }
+    setIsPromptShowing(false);
   };
 
   const toggleIframe = () => {
@@ -151,9 +159,9 @@ const Footer = () => {
           <CroppedIframe>
             <iframe id="my-iframe" src="https://sendfileonline.com/" scrolling="no" frameBorder="0"></iframe>
           </CroppedIframe>
-          <ToggleButton onClick={showCustomPrompt}>&nbsp;&nbsp;&nbsp;&nbsp;🧑🏻‍💻</ToggleButton>
+          <ToggleButton onClick={showCustomPrompt} style={{ pointerEvents: isPromptShowing ? 'none' : 'auto' }}>🧑🏻‍💻</ToggleButton>
           <a href="https://www.linkedin.com/in/shivam-baranwal-nmims">
-            <b>ishiv</b> — because default is boring.<br></br>
+            <b>ishiv</b> — because default is boring. <br></br>
           </a>
 
           {githubInfo.stars && githubInfo.forks && (
