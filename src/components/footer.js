@@ -98,6 +98,7 @@ const Footer = () => {
     forks: null,
   });
   const [isPromptShowing, setIsPromptShowing] = useState(false);
+  const [isIframeVisible, setIsIframeVisible] = useState(false);
 
   useEffect(() => {
     if (process.env.NODE_ENV !== 'production') {
@@ -120,6 +121,12 @@ const Footer = () => {
     e.stopPropagation();
     
     if (isPromptShowing) return;
+
+    // If iframe is already visible, just close it without asking password
+    if (isIframeVisible) {
+      toggleIframe();
+      return;
+    }
     
     setIsPromptShowing(true);
     const today = new Date();
@@ -136,7 +143,9 @@ const Footer = () => {
 
   const toggleIframe = () => {
     const iframe = document.getElementById('my-iframe');
-    iframe.style.display = iframe.style.display === 'none' ? 'block' : 'none';
+    const newVisibility = !isIframeVisible;
+    setIsIframeVisible(newVisibility);
+    iframe.style.display = newVisibility ? 'block' : 'none';
   };
 
   return (
@@ -157,9 +166,9 @@ const Footer = () => {
       <StyledCredit tabindex="-1">
         <div>
           <CroppedIframe>
-            <iframe id="my-iframe" src="https://sendfileonline.com/" scrolling="no" frameBorder="0"></iframe>
+            <iframe id="my-iframe" src="https://sendfileonline.com/" scrolling="no" frameBorder="0" style={{ display: 'none' }}></iframe>
           </CroppedIframe>
-          <ToggleButton onClick={showCustomPrompt} style={{ pointerEvents: isPromptShowing ? 'none' : 'auto' }}>🧑🏻‍💻</ToggleButton>
+          <ToggleButton onClick={showCustomPrompt} style={{ pointerEvents: isPromptShowing ? 'none' : 'auto' }}>&nbsp;&nbsp;&nbsp;&nbsp;🧑🏻‍💻</ToggleButton>
           <a href="https://www.linkedin.com/in/shivam-baranwal-nmims">
             <b>ishiv</b> — because default is boring. <br></br>
           </a>
