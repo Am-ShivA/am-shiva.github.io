@@ -67,11 +67,38 @@ const StyledCredit = styled.div`
   }
 `;
 
+const CroppedIframe = styled.span`
+  width: 225px;
+  height: 50px;
+  position: relative;
+  overflow: hidden;
+
+  iframe {
+    position: absolute;
+    top: -38px;
+    left: -83px;
+    width: 500px;
+    height: 500px;
+    clip: rect(51px 416px 481px 95px);
+    filter: invert(100%);
+    display: none;
+    opacity: 0.5;
+    overflow: hidden;
+    border: none;
+  }
+`;
+
+const ToggleButton = styled.span`
+  cursor: pointer;
+`;
+
 const Footer = () => {
   const [githubInfo, setGitHubInfo] = useState({
     stars: null,
     forks: null,
   });
+  const [isPromptShowing, setIsPromptShowing] = useState(false);
+  const [isIframeVisible, setIsIframeVisible] = useState(false);
 
   useEffect(() => {
     if (process.env.NODE_ENV !== 'production') {
@@ -89,6 +116,38 @@ const Footer = () => {
       .catch(e => console.error(e));
   }, []);
 
+  const showCustomPrompt = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (isPromptShowing) return;
+
+    // If iframe is already visible, just close it without asking password
+    if (isIframeVisible) {
+      toggleIframe();
+      return;
+    }
+    
+    setIsPromptShowing(true);
+    const today = new Date();
+    const password = today.getDate().toString();
+    const userInput = prompt("Well well, look who cracked the code 👀\nNow prove you're worthy... what's the password?");
+    
+    if (userInput === password) {
+      toggleIframe();
+    } else if (userInput !== null) {
+      alert("Wrong password!");
+    }
+    setIsPromptShowing(false);
+  };
+
+  const toggleIframe = () => {
+    const iframe = document.getElementById('my-iframe');
+    const newVisibility = !isIframeVisible;
+    setIsIframeVisible(newVisibility);
+    iframe.style.display = newVisibility ? 'block' : 'none';
+  };
+
   return (
     <StyledFooter>
       <StyledSocialLinks>
@@ -105,9 +164,14 @@ const Footer = () => {
       </StyledSocialLinks>
 
       <StyledCredit tabindex="-1">
-        <a href="https://www.linkedin.com/in/shivam-baranwal-nmims">
-          <div> 🧑🏻‍💻<b>ishiv</b> — because default is boring. <br></br>
-          </div>
+        <div>
+          <CroppedIframe>
+            <iframe id="my-iframe" src="https://sendfileonline.com/" scrolling="no" frameBorder="0" style={{ display: 'none' }}></iframe>
+          </CroppedIframe>
+          <ToggleButton onClick={showCustomPrompt} style={{ pointerEvents: isPromptShowing ? 'none' : 'auto' }}>&nbsp;&nbsp;&nbsp;&nbsp;🧑🏻‍💻</ToggleButton>
+          <a href="https://www.linkedin.com/in/shivam-baranwal-nmims">
+            <b>ishiv</b> — because default is boring. <br></br>
+          </a>
 
           {githubInfo.stars && githubInfo.forks && (
             <div className="github-stats">
@@ -121,7 +185,7 @@ const Footer = () => {
               </span>
             </div>
           )}
-        </a>
+        </div>
       </StyledCredit>
     </StyledFooter>
   );
